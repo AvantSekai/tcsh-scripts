@@ -1,0 +1,20 @@
+#!/bin/tcsh
+
+foreach x ( `\ls -1 | awk '{print $NF}'` )
+echo $x
+
+if (`stat $x | grep directory` == "") then
+echo "  [$x] is not a directory, SKIPPING\n"
+continue
+else
+echo "  [$x] is a directory"
+endif
+
+cd $x
+foreach y (`\ls -l *\.[Cc][Rr][2] | awk '{print $NF}'`)
+set base = `basename $y .CR2`
+convert $y $base.jpg -verbose
+end
+cd ../
+echo "  FINISHED directory [$x]\n"
+end
